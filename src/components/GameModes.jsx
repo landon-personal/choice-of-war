@@ -1,8 +1,8 @@
-export default function GameModes({ onNavigate }) {
+export default function GameModes({ onNavigate, onSelectMode }) {
   const modes = [
     { id: 'solo', name: 'SOLO', desc: 'Play through historical conflicts alone', available: true },
+    { id: 'multiplayer', name: 'MULTIPLAYER', desc: 'Vote on decisions with friends (local co-op, 2-4 players)', available: true },
     { id: 'story', name: 'STORY MODE', desc: 'A connected campaign through history', available: false },
-    { id: 'multiplayer', name: 'MULTIPLAYER', desc: 'Compete with friends', available: false },
     { id: 'solo-bots', name: 'SOLO WITH BOTS', desc: 'Play against AI opponents', available: false },
   ];
 
@@ -27,7 +27,7 @@ export default function GameModes({ onNavigate }) {
           {modes.map((mode) => (
             <button
               key={mode.id}
-              onClick={() => mode.available && onNavigate('levelselect')}
+              onClick={() => mode.available && onSelectMode(mode.id)}
               disabled={!mode.available}
               className={`pixel-btn text-left px-8 py-5 ${
                 mode.available

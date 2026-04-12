@@ -1,0 +1,7 @@
+{
+  "name": "choice-of-war",
+  "description": "A retro pixelated choose-your-own-adventure warfare game that teaches history through interactive stories",
+  "site": {
+    "outputDirectory": "dist"
+  }
+}
