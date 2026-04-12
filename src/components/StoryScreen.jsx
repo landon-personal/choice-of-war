@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import stories from '../data/stories';
 import countries from '../data/countries';
+import SceneArt from './SceneArt';
 
 function parseStoryText(text) {
   const parts = [];
@@ -176,6 +177,8 @@ export default function StoryScreen({ levelId, onNavigate }) {
                 </div>
               </div>
 
+              <SceneArt levelId={levelId} nodeId={null} isIntro={true} />
+
               <div className="border border-red-900/30 bg-black/40 p-4 md:p-8 mb-4 md:mb-8">
                 <div className="flex items-center gap-2 mb-3 md:mb-4">
                   <div className="w-1.5 h-1.5 bg-amber-500 rounded-full blink" />
@@ -214,11 +217,14 @@ export default function StoryScreen({ levelId, onNavigate }) {
                 </div>
               )}
 
+              {/* Scene illustration */}
+              <SceneArt levelId={levelId} nodeId={currentNode} isIntro={false} />
+
               {/* Story text */}
               <div
                 ref={textRef}
                 className="border border-red-900/20 bg-black/50 p-3 md:p-8 overflow-y-auto mb-4 md:mb-6"
-                style={{ maxHeight: '45vh' }}
+                style={{ maxHeight: '40vh' }}
               >
                 {showChoices && storyParts.length > 0 ? (
                   <div className="space-y-3 md:space-y-5">

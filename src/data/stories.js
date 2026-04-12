@@ -29,15 +29,50 @@ const stories = {
         ]
       },
       talk_checkpoint: {
-        text: "You approach the Soviet soldiers calmly. One speaks broken Spanish. You explain you're just a family trying to reach relatives in the countryside.\n\nThe soldier looks at your children and nods sympathetically. He waves you through but warns: \"Do not go near San Cristóbal. Very dangerous.\"\n\nHistorical fact: San Cristóbal was one of the sites where Soviet medium-range ballistic missiles were deployed, capable of reaching Washington D.C. in just 13 minutes.\n\nYou make it to a small village where you wait anxiously for news.",
+        text: "You approach the Soviet soldiers calmly. One speaks broken Spanish. You explain you're just a family trying to reach relatives in the countryside.\n\nThe soldier looks at your children and nods sympathetically. He waves you through but warns: \"Do not go near San Cristóbal. Very dangerous.\"\n\nHistorical fact: San Cristóbal was one of the sites where Soviet medium-range ballistic missiles were deployed, capable of reaching Washington D.C. in just 13 minutes.\n\nYou make it to a small village. But the village is tense — American planes fly overhead constantly.",
+        choices: [
+          { text: "HELP THE VILLAGERS BUILD A SHELTER", next: "village_shelter" },
+          { text: "TRY TO REACH THE COAST AND FIND A BOAT", next: "coast_escape" },
+          { text: "STAY HIDDEN AND WAIT FOR NEWS", next: "radio_updates" }
+        ]
+      },
+      village_shelter: {
+        text: "You help the villagers dig a shelter in the hillside. Working together, you reinforce it with timber and stones. The children play nearby, unaware of how close the world is to destruction.\n\nHistorical fact: On October 26, Khrushchev sent a personal letter to Kennedy, offering to remove missiles in exchange for a US promise not to invade Cuba. Kennedy's advisors were divided on how to respond.\n\nAn old farmer shares his rum with you. \"If the bombs come,\" he says, \"at least we face them together.\"",
         choices: [
           { text: "WAIT FOR THE CRISIS TO END", next: "ending_survive" }
         ]
       },
-      jungle_path: {
-        text: "You take your family through dense jungle trails. It's slow going, especially with children. But you avoid all military presence.\n\nAfter two days of walking, you reach a small fishing village on the southern coast. The people here seem almost unaware of the crisis.\n\nHistorical fact: The Cuban Missile Crisis lasted 13 days, from October 16-28, 1962. It is widely considered the closest the Cold War came to escalating into full-scale nuclear war.\n\nA fisherman offers to take you further along the coast. You settle in and wait.",
+      coast_escape: {
+        text: "You trek south toward the coast, passing through sugar cane fields and along dirt roads. After a full day of walking, you reach a small fishing harbor.\n\nHistorical fact: During the crisis, the US Navy established a naval blockade (called a 'quarantine') around Cuba. Over 180 ships enforced the blockade, turning back Soviet vessels carrying missiles.\n\nA fisherman named Carlos offers to hide your family in his boat house. From the shore, you can see American warships on the horizon. The standoff is real.",
         choices: [
-          { text: "WAIT FOR THE CRISIS TO END", next: "ending_survive" }
+          { text: "STAY WITH CARLOS AND FISH TO SURVIVE", next: "fishing_survive" },
+          { text: "TRY TO SAIL TO MEXICO", next: "mexico_attempt" }
+        ]
+      },
+      fishing_survive: {
+        text: "Carlos teaches you to fish. For days you live on the coast, eating fresh catch and sleeping in his boat house. His radio crackles with updates.\n\nHistorical fact: Attorney General Robert Kennedy secretly met with Soviet Ambassador Dobrynin on October 27, offering to remove US missiles from Turkey in exchange for Soviet missiles leaving Cuba. This secret deal helped end the crisis.\n\nOn October 28, Carlos bursts in: \"It's over! Khrushchev is removing the missiles!\"",
+        choices: [
+          { text: "CONTINUE", next: "ending_survive" }
+        ]
+      },
+      mexico_attempt: {
+        text: "Carlos warns you it's suicide — the American navy will stop any boat. But desperation drives you. You set out at night in a small fishing boat.\n\nYou don't get far. An American patrol boat spots you within hours. They board your vessel, find only a terrified family, and after tense questioning, escort you back to shore.\n\nHistorical fact: The US military was on DEFCON 2 during the crisis — the highest alert level ever reached (except DEFCON 1, which means nuclear war is imminent). Military personnel were authorized to shoot down any unidentified aircraft.\n\nBack on shore, you wait out the final days. The crisis ends.",
+        choices: [
+          { text: "CONTINUE", next: "ending_survive" }
+        ]
+      },
+      jungle_path: {
+        text: "You take your family through dense jungle trails. It's slow going, especially with children. Mosquitoes swarm and the heat is unbearable.\n\nAfter two days of walking, you reach a small fishing village on the southern coast. The people here seem almost unaware of the crisis.\n\nHistorical fact: The Cuban Missile Crisis lasted 13 days, from October 16-28, 1962. It is widely considered the closest the Cold War came to escalating into full-scale nuclear war.\n\nA fisherman offers to take you further along the coast. But you also notice a school that's been converted into a makeshift hospital.",
+        choices: [
+          { text: "HELP AT THE MAKESHIFT HOSPITAL", next: "hospital_help" },
+          { text: "CONTINUE SOUTH TO THE FISHING VILLAGE", next: "fishing_survive" },
+          { text: "STAY HERE AND WAIT IT OUT", next: "radio_updates" }
+        ]
+      },
+      hospital_help: {
+        text: "The hospital is overwhelmed. A doctor — the only one for miles — is treating soldiers and civilians alike. You help carry water, clean wounds, and comfort the injured.\n\nHistorical fact: Cuba had mobilized 270,000 troops and militia during the crisis, preparing for a US invasion that seemed inevitable. Many soldiers were teenagers and young farmers like you.\n\nA young soldier, barely older than you, grips your hand. \"Tell my mother I was brave,\" he whispers. He's not wounded from war — just exhaustion and fear.\n\nDays later, the crisis ends. You helped save lives.",
+        choices: [
+          { text: "CONTINUE", next: "ending_survive" }
         ]
       },
       radio_updates: {
@@ -87,7 +122,27 @@ const stories = {
         ]
       },
       fire_watch: {
-        text: "You climb to the rooftop of a building near St. Paul's Cathedral. The sky is orange with flames. You can see fires burning across the East End.\n\nYour job is to spot incendiary bombs and extinguish them before they start larger fires. You work through the night with a bucket of sand and a stirrup pump.\n\nHistorical fact: On December 29, 1940, the Luftwaffe dropped thousands of incendiary bombs on London, creating a firestorm. Firefighters and volunteers saved St. Paul's Cathedral, which became a symbol of British resilience.\n\nBy dawn, you're exhausted but alive. The all-clear sounds.",
+        text: "You climb to the rooftop of a building near St. Paul's Cathedral. The sky is orange with flames. You can see fires burning across the East End.\n\nYour job is to spot incendiary bombs and extinguish them before they start larger fires. You work through the night with a bucket of sand and a stirrup pump.\n\nHistorical fact: On December 29, 1940, the Luftwaffe dropped thousands of incendiary bombs on London, creating a firestorm. Firefighters and volunteers saved St. Paul's Cathedral, which became a symbol of British resilience.\n\nSuddenly an incendiary lands on the roof of the building next door. A woman screams from inside.",
+        choices: [
+          { text: "RUSH TO EXTINGUISH THE BOMB", next: "extinguish_bomb" },
+          { text: "RUN INSIDE TO EVACUATE THE BUILDING", next: "evacuate_building" },
+          { text: "SIGNAL THE FIRE BRIGADE FOR HELP", next: "fire_brigade" }
+        ]
+      },
+      extinguish_bomb: {
+        text: "You grab your bucket of sand and sprint across the gap between rooftops. The incendiary is sputtering white-hot phosphorus. You dump the sand directly on it, smothering the flame.\n\nThe building is saved. The woman — a nurse heading to her night shift — thanks you through tears.\n\nHistorical fact: Incendiary bombs were small but deadly. Each one could start a fire that would destroy an entire building. Trained fire watchers saved countless structures during the Blitz.\n\nBy dawn, you're exhausted but alive. The all-clear sounds.",
+        choices: [
+          { text: "CONTINUE", next: "morning_after" }
+        ]
+      },
+      evacuate_building: {
+        text: "You rush down the stairs and pound on doors. Three families are still inside — they hadn't heard the alarm over the bombing. You guide them out through the smoke as flames spread across the top floor.\n\nHistorical fact: Many Blitz casualties occurred when people refused to leave their homes during raids. The government eventually mandated compulsory evacuation in heavily targeted areas.\n\nEveryone gets out. The building burns, but no lives are lost. The fire brigade arrives too late to save the structure, but thanks to you, that's all that was lost.",
+        choices: [
+          { text: "CONTINUE", next: "morning_after" }
+        ]
+      },
+      fire_brigade: {
+        text: "You use your torch to signal the fire brigade station three streets away. Within minutes, they arrive with their pump engine.\n\nThe firefighters are volunteers — a shopkeeper, a teacher, a retired sailor. They work with practiced efficiency to control the blaze.\n\nHistorical fact: London's fire service was overwhelmed during the Blitz. The Auxiliary Fire Service recruited over 200,000 volunteers. Many had no prior experience — they learned on the job during actual air raids.\n\nTogether you contain the fire. By dawn, you're exhausted but alive.",
         choices: [
           { text: "CONTINUE", next: "morning_after" }
         ]
@@ -111,7 +166,25 @@ const stories = {
         ]
       },
       morning_after: {
-        text: "Dawn reveals the damage. Smoke rises from dozens of fires. Rubble fills the streets. But London stands.\n\nPeople emerge from shelters, dust themselves off, and carry on. The buses run. The shops open. Life continues in defiance.\n\nKEY LESSONS:\n• The Blitz lasted from September 1940 to May 1941 — 8 months of sustained bombing\n• Over 30,000 bombs fell on London alone\n• Civilian courage and community spirit were as important as military defense\n• The Blitz failed to break British morale — it strengthened resolve instead\n\nThank you for experiencing this chapter of history.",
+        text: "Dawn reveals the damage. Smoke rises from dozens of fires. Rubble fills the streets. But London stands.\n\nPeople emerge from shelters, dust themselves off, and carry on. The buses run. The shops open. A woman sweeps broken glass from her doorstep.\n\nHistorical fact: During the Blitz, Londoners developed a spirit known as 'the Blitz spirit' — a determination to carry on with normal life despite the bombing. This resilience became a defining part of British identity.\n\nYour mother asks what you want to do today. The bombs will come again tonight.",
+        choices: [
+          { text: "HELP CLEAR RUBBLE AND SEARCH FOR SURVIVORS", next: "clear_rubble" },
+          { text: "QUEUE FOR RATIONS — YOUR FAMILY NEEDS FOOD", next: "ration_queue" },
+          { text: "WRITE A LETTER TO FATHER IN NORTH AFRICA", next: "write_letter" }
+        ]
+      },
+      clear_rubble: {
+        text: "You join a team of volunteers digging through the ruins of a collapsed pub. You find three survivors — a barman and two patrons who sheltered in the cellar.\n\nHistorical fact: Heavy Rescue Squads were specialist teams trained to find and extract survivors from bombed buildings. They worked in extremely dangerous conditions, with unstable structures threatening to collapse at any moment.\n\nThe barman shakes your hand. \"Same time tomorrow, then?\" he says with a grim smile. London's dark humor keeps everyone going.\n\nKEY LESSONS:\n• The Blitz lasted from September 1940 to May 1941 — 8 months of sustained bombing\n• Over 30,000 bombs fell on London alone\n• Civilian courage and community spirit were as important as military defense\n• The Blitz failed to break British morale — it strengthened resolve instead\n\nThank you for experiencing this chapter of history.",
+        choices: [],
+        isEnding: true
+      },
+      ration_queue: {
+        text: "You queue for two hours at the grocer's. Rationing is strict — each person gets only a few ounces of meat, sugar, and butter per week. But nobody complains.\n\nHistorical fact: Rationing in Britain began in January 1940 and continued until 1954 — nine years after the war ended. Despite the restrictions, the health of the British population actually improved during rationing because food was distributed more fairly.\n\nA woman in the queue shares her recipe for carrot cake — made without sugar. \"We make do,\" she says. And you do.\n\nKEY LESSONS:\n• The Blitz lasted from September 1940 to May 1941 — 8 months of sustained bombing\n• Over 30,000 bombs fell on London alone\n• Civilian courage and community spirit were as important as military defense\n• The Blitz failed to break British morale — it strengthened resolve instead\n\nThank you for experiencing this chapter of history.",
+        choices: [],
+        isEnding: true
+      },
+      write_letter: {
+        text: "You sit at the kitchen table and write to your father. You tell him the family is safe. You don't mention the fear, the sleepless nights, the house three doors down that no longer exists.\n\n\"We're all fine, Dad. London's still standing. Come home soon.\"\n\nHistorical fact: Millions of letters were sent between soldiers abroad and their families during the war. Censors reviewed outgoing military mail, but letters from home were a crucial morale boost for troops.\n\nYou post the letter and head back to prepare for another night.\n\nKEY LESSONS:\n• The Blitz lasted from September 1940 to May 1941 — 8 months of sustained bombing\n• Over 30,000 bombs fell on London alone\n• Civilian courage and community spirit were as important as military defense\n• The Blitz failed to break British morale — it strengthened resolve instead\n\nThank you for experiencing this chapter of history.",
         choices: [],
         isEnding: true
       }
