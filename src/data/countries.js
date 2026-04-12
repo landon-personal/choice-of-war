@@ -44,24 +44,114 @@ const countries = {
       region: "Mediterranean",
       x: 53, y: 30,
       conflict: "Fall of Rome (1943-1944)"
+    },
+    {
+      id: "egypt",
+      name: "EGYPT",
+      region: "North Africa",
+      x: 56, y: 38,
+      conflict: "The Suez Crisis (1956)"
+    },
+    {
+      id: "usa",
+      name: "USA",
+      region: "North America",
+      x: 18, y: 32,
+      conflict: "Attack on Pearl Harbor (1941)"
+    },
+    {
+      id: "argentina",
+      name: "ARGENTINA",
+      region: "South America",
+      x: 28, y: 72,
+      conflict: "The Falklands War (1982)"
+    },
+    {
+      id: "southafrica",
+      name: "SOUTH AFRICA",
+      region: "Southern Africa",
+      x: 55, y: 68,
+      conflict: "Apartheid Resistance (1960-1990)"
+    },
+    {
+      id: "australia",
+      name: "AUSTRALIA",
+      region: "Oceania",
+      x: 84, y: 68,
+      conflict: "Gallipoli Campaign (1915)"
+    },
+    {
+      id: "indonesia",
+      name: "INDONESIA",
+      region: "Southeast Asia",
+      x: 80, y: 55,
+      conflict: "War of Independence (1945-1949)"
+    },
+    {
+      id: "india",
+      name: "INDIA",
+      region: "South Asia",
+      x: 72, y: 40,
+      conflict: "Partition of India (1947)"
+    },
+    {
+      id: "russia",
+      name: "RUSSIA",
+      region: "Eastern Europe",
+      x: 68, y: 18,
+      conflict: "Siege of Stalingrad (1942-1943)"
+    },
+    {
+      id: "france",
+      name: "FRANCE",
+      region: "Western Europe",
+      x: 49, y: 28,
+      conflict: "The French Resistance (1940-1944)"
+    },
+    {
+      id: "sudan",
+      name: "SUDAN",
+      region: "East Africa",
+      x: 57, y: 44,
+      conflict: "Birth of South Sudan (2005-2011)"
+    },
+    {
+      id: "ukraine",
+      name: "UKRAINE",
+      region: "Eastern Europe",
+      x: 58, y: 24,
+      conflict: "The Holodomor (1932-1933)"
+    },
+    {
+      id: "mexico",
+      name: "MEXICO",
+      region: "North America",
+      x: 17, y: 40,
+      conflict: "Mexican Revolution (1910-1920)"
+    },
+    {
+      id: "peru",
+      name: "PERU",
+      region: "South America",
+      x: 24, y: 58,
+      conflict: "Shining Path Conflict (1980-2000)"
+    },
+    {
+      id: "venezuela",
+      name: "VENEZUELA",
+      region: "South America",
+      x: 26, y: 48,
+      conflict: "Venezuelan Independence (1810-1821)"
+    },
+    {
+      id: "mongolia",
+      name: "MONGOLIA",
+      region: "Central Asia",
+      x: 75, y: 24,
+      conflict: "Battle of Khalkhin Gol (1939)"
     }
   ],
   comingSoon: [
-    { name: "EGYPT", x: 56, y: 38 },
-    { name: "USA", x: 18, y: 32 },
-    { name: "ARGENTINA", x: 28, y: 72 },
-    { name: "SOUTH AFRICA", x: 55, y: 68 },
-    { name: "AUSTRALIA", x: 84, y: 68 },
-    { name: "INDONESIA", x: 80, y: 55 },
-    { name: "INDIA", x: 72, y: 40 },
-    { name: "RUSSIA", x: 68, y: 18 },
-    { name: "FRANCE", x: 49, y: 28 },
-    { name: "SUDAN", x: 57, y: 44 },
-    { name: "UKRAINE", x: 58, y: 24 },
-    { name: "MEXICO", x: 17, y: 40 },
-    { name: "PERU", x: 24, y: 58 },
-    { name: "VENEZUELA", x: 26, y: 48 },
-    { name: "MONGOLIA", x: 75, y: 24 }
   ]
 };
 

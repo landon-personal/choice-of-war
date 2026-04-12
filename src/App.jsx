@@ -5,12 +5,13 @@ import LevelSelect from './components/LevelSelect';
 import StoryScreen from './components/StoryScreen';
 import MultiplayerLobby from './components/MultiplayerLobby';
 import MultiplayerStory from './components/MultiplayerStory';
+import { useMultiplayer } from './hooks/useMultiplayer';
 
 function App() {
   const [screen, setScreen] = useState('title');
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [gameMode, setGameMode] = useState('solo');
-  const [players, setPlayers] = useState([]);
+  const multiplayer = useMultiplayer();
 
   function handleSelectLevel(levelId) {
     setSelectedLevel(levelId);
@@ -30,19 +31,14 @@ function App() {
     }
   }
 
-  function handleStartMultiplayer(playerList) {
-    setPlayers(playerList);
-    setScreen('levelselect');
-  }
-
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-[100dvh] bg-black">
       {screen === 'title' && <TitleScreen onNavigate={handleNavigate} />}
       {screen === 'gamemodes' && <GameModes onNavigate={handleNavigate} onSelectMode={handleSelectMode} />}
-      {screen === 'multiplayer-lobby' && <MultiplayerLobby onNavigate={handleNavigate} onStartMultiplayer={handleStartMultiplayer} />}
+      {screen === 'multiplayer-lobby' && <MultiplayerLobby onNavigate={handleNavigate} multiplayer={multiplayer} />}
       {screen === 'levelselect' && <LevelSelect onNavigate={handleNavigate} onSelectLevel={handleSelectLevel} />}
       {screen === 'story' && selectedLevel && <StoryScreen levelId={selectedLevel} onNavigate={handleNavigate} />}
-      {screen === 'multiplayer-story' && selectedLevel && <MultiplayerStory levelId={selectedLevel} players={players} onNavigate={handleNavigate} />}
+      {screen === 'multiplayer-story' && selectedLevel && <MultiplayerStory levelId={selectedLevel} multiplayer={multiplayer} onNavigate={handleNavigate} />}
     </div>
   );
 }
