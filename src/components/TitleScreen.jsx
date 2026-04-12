@@ -9,8 +9,7 @@ export default function TitleScreen({ onNavigate }) {
   }, []);
 
   return (
-    <div className="scanlines min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Background effects */}
+    <div className="scanlines min-h-[100dvh] bg-black flex flex-col items-center justify-center relative overflow-hidden px-4">
       <div className="absolute inset-0 bg-gradient-to-b from-red-950/30 via-black to-red-950/20" />
       <div className="absolute inset-0 opacity-10">
         {Array.from({ length: 20 }).map((_, i) => (
@@ -27,42 +26,36 @@ export default function TitleScreen({ onNavigate }) {
         ))}
       </div>
 
-      {/* Title */}
-      <div className="relative z-10 text-center mb-16">
-        <div className="pixel-text text-sm text-red-500 mb-4 tracking-[8px]">
-          ★ ★ ★ PRESENTS ★ ★ ★
+      <div className="relative z-10 text-center mb-10 md:mb-16">
+        <div className="pixel-text text-[8px] md:text-sm text-red-500 mb-3 md:mb-4 tracking-[6px] md:tracking-[8px]">
+          PRESENTS
         </div>
-        <h1 className="pixel-text text-6xl md:text-8xl font-bold text-red-600 glow-red mb-2 leading-tight">
+        <h1 className="pixel-text text-4xl md:text-8xl font-bold text-red-600 glow-red mb-1 md:mb-2 leading-tight">
           CHOICE
         </h1>
-        <div className="pixel-text text-2xl md:text-3xl text-red-400 mb-2 tracking-[12px]">
-          — OF —
+        <div className="pixel-text text-lg md:text-3xl text-red-400 mb-1 md:mb-2 tracking-[8px] md:tracking-[12px]">
+          OF
         </div>
-        <h1 className="pixel-text text-6xl md:text-8xl font-bold text-red-600 glow-red leading-tight">
+        <h1 className="pixel-text text-4xl md:text-8xl font-bold text-red-600 glow-red leading-tight">
           WAR
         </h1>
-        <div className="pixel-text text-xs text-gray-500 mt-6 tracking-[4px]">
+        <div className="pixel-text text-[7px] md:text-xs text-gray-500 mt-4 md:mt-6 tracking-[3px] md:tracking-[4px]">
           BY LANDON KRUSE
         </div>
       </div>
 
-      {/* Menu */}
       {showMenu && (
-        <div className="relative z-10 flex flex-col gap-4 fade-in">
+        <div className="relative z-10 flex flex-col gap-3 fade-in w-full max-w-xs">
           <button
             onClick={() => onNavigate('gamemodes')}
-            className="pixel-btn bg-red-900/80 border-red-600 text-red-100 px-12 py-4 text-lg hover:bg-red-800"
+            className="pixel-btn bg-red-900/80 border-red-600 text-red-100 px-8 py-3 md:py-4 text-[10px] md:text-sm hover:bg-red-800"
           >
-            ▶ START GAME
+            START GAME
           </button>
-          <div className="pixel-text text-gray-600 text-xs text-center mt-4">
-            PRESS START TO BEGIN
-          </div>
         </div>
       )}
 
-      {/* Blinking cursor */}
-      <div className="absolute bottom-8 pixel-text text-red-800 text-xs blink">
+      <div className="absolute bottom-6 pixel-text text-red-800 text-xs blink">
         ▮
       </div>
     </div>
