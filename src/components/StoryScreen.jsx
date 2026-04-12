@@ -88,7 +88,7 @@ export default function StoryScreen({ levelId, onNavigate }) {
     <div className="scanlines min-h-screen bg-black flex flex-col" onClick={skipTyping}>
       <div className="absolute inset-0 bg-gradient-to-b from-red-950/10 via-black to-black" />
 
-      <div className="relative z-10 flex flex-col justify-center min-h-screen p-6 md:p-10 max-w-3xl mx-auto w-full">
+      <div className="relative z-10 flex flex-col justify-center min-h-screen p-8 md:p-16 lg:p-24 w-full">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button
