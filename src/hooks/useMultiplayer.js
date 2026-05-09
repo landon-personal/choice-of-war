@@ -12,6 +12,7 @@ function generateRoomCode() {
 }
 
 const PEER_PREFIX = 'cow-game-'; // choice of war prefix
+const PLAYER_COLORS = ['#ff4444', '#4488ff', '#44ff44', '#ffaa00'];
 
 export function useMultiplayer() {
   const [isHost, setIsHost] = useState(false);
@@ -21,12 +22,78 @@ export function useMultiplayer() {
   const [error, setError] = useState(null);
   const [players, setPlayers] = useState([]);
   const [gameState, setGameState] = useState(null);
+  const [peerId, setPeerId] = useState(null);
 
   const peerRef = useRef(null);
   const connectionsRef = useRef([]); // host keeps all connections
   const hostConnRef = useRef(null); // client keeps connection to host
+  const gameStateRef = useRef(null); // track current game state for new joiners
 
-  const playerColors = ['#ff4444', '#4488ff', '#44ff44', '#ffaa00'];
+  // HOST: Broadcast to all connected clients
+  const broadcastToAll = useCallback((data) => {
+    connectionsRef.current.forEach(conn => {
+      if (conn.open) {
+        conn.send(data);
+      }
+    });
+  }, []);
+
+  // HOST: Handle messages from clients
+  const handleHostReceive = useCallback((conn, data) => {
+    // Drop malformed messages from peers — peers can send anything over a
+    // PeerJS data channel, including objects designed to crash the UI
+    // (NaN choiceIndex, name with embedded HTML, missing peerId).
+    if (!data || typeof data !== 'object' || typeof data.type !== 'string') return;
+    if (data.type === 'join') {
+      const safeName = typeof data.name === 'string' ? data.name.slice(0, 32) : 'PLAYER';
+      const safePeerId = typeof data.peerId === 'string' && data.peerId.length < 200 ? data.peerId : null;
+      if (!safePeerId) return;
+      setPlayers(prev => {
+        const newPlayer = {
+          id: safePeerId,
+          name: safeName,
+          color: PLAYER_COLORS[prev.length % PLAYER_COLORS.length],
+        };
+        const updated = [...prev, newPlayer];
+        broadcastToAll({ type: 'players', players: updated });
+        // Send current game state to new joiner via ref (avoids stale closure)
+        if (gameStateRef.current) {
+          conn.send({ type: 'gameState', state: gameStateRef.current });
+        }
+        return updated;
+      });
+    } else if (data.type === 'vote') {
+      // Validate vote payload — choiceIndex must be 0..3 (max choices in
+      // any story node), playerId must be a string. A malicious peer
+      // could otherwise inject garbage votes that break the tally.
+      const choice = data.choiceIndex;
+      if (typeof choice !== 'number' || !Number.isInteger(choice) || choice < 0 || choice > 9) return;
+      if (typeof data.playerId !== 'string') return;
+      setGameState(prev => {
+        if (!prev) return prev;
+        const newVotes = { ...prev.votes, [data.playerId]: choice };
+        const updated = { ...prev, votes: newVotes };
+        gameStateRef.current = updated;
+        broadcastToAll({ type: 'gameState', state: updated });
+        return updated;
+      });
+    }
+  }, [broadcastToAll]);
+
+  // CLIENT: Handle messages from host. The host is trusted in this P2P
+  // model (host owns gameState authority), but a malicious / buggy host
+  // could still send a malformed payload that crashes downstream renders.
+  // Drop type-mismatched messages instead of letting them through.
+  const handleClientReceive = useCallback((data) => {
+    if (!data || typeof data !== 'object' || typeof data.type !== 'string') return;
+    if (data.type === 'players') {
+      if (!Array.isArray(data.players)) return;
+      setPlayers(data.players);
+    } else if (data.type === 'gameState') {
+      if (!data.state || typeof data.state !== 'object') return;
+      setGameState(data.state);
+    }
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -42,9 +109,9 @@ export function useMultiplayer() {
     setConnecting(true);
     setError(null);
     const code = generateRoomCode();
-    const peerId = PEER_PREFIX + code;
+    const pId = PEER_PREFIX + code;
 
-    const peer = new Peer(peerId);
+    const peer = new Peer(pId);
     peerRef.current = peer;
 
     peer.on('open', () => {
@@ -52,7 +119,8 @@ export function useMultiplayer() {
       setIsHost(true);
       setConnected(true);
       setConnecting(false);
-      const hostPlayer = { id: peer.id, name: playerName || 'HOST', color: playerColors[0] };
+      setPeerId(peer.id);
+      const hostPlayer = { id: peer.id, name: playerName || 'HOST', color: PLAYER_COLORS[0] };
       setPlayers([hostPlayer]);
     });
 
@@ -80,7 +148,7 @@ export function useMultiplayer() {
       setConnecting(false);
       console.error('PeerJS error:', err);
     });
-  }, []);
+  }, [handleHostReceive, broadcastToAll]);
 
   // CLIENT: Join a room
   const joinRoom = useCallback((code, playerName) => {
@@ -100,7 +168,7 @@ export function useMultiplayer() {
         setIsHost(false);
         setConnected(true);
         setConnecting(false);
-        // Tell host our name
+        setPeerId(peer.id);
         conn.send({ type: 'join', name: playerName || 'PLAYER', peerId: peer.id });
       });
 
@@ -128,77 +196,30 @@ export function useMultiplayer() {
       setConnecting(false);
       console.error('PeerJS error:', err);
     });
-  }, []);
-
-  // HOST: Handle messages from clients
-  function handleHostReceive(conn, data) {
-    if (data.type === 'join') {
-      setPlayers(prev => {
-        const newPlayer = {
-          id: data.peerId,
-          name: data.name,
-          color: playerColors[prev.length % playerColors.length],
-        };
-        const updated = [...prev, newPlayer];
-        // Send full player list to ALL clients
-        broadcastToAll({ type: 'players', players: updated });
-        // Send current game state to the new player
-        if (gameState) {
-          conn.send({ type: 'gameState', state: gameState });
-        }
-        return updated;
-      });
-    } else if (data.type === 'vote') {
-      // Forward vote to game state handler
-      setGameState(prev => {
-        if (!prev) return prev;
-        const newVotes = { ...prev.votes, [data.playerId]: data.choiceIndex };
-        const updated = { ...prev, votes: newVotes };
-        broadcastToAll({ type: 'gameState', state: updated });
-        return updated;
-      });
-    }
-  }
-
-  // CLIENT: Handle messages from host
-  function handleClientReceive(data) {
-    if (data.type === 'players') {
-      setPlayers(data.players);
-    } else if (data.type === 'gameState') {
-      setGameState(data.state);
-    }
-  }
-
-  // HOST: Broadcast to all connected clients
-  function broadcastToAll(data) {
-    connectionsRef.current.forEach(conn => {
-      if (conn.open) {
-        conn.send(data);
-      }
-    });
-  }
+  }, [handleClientReceive]);
 
   // HOST: Update game state and broadcast
   const updateGameState = useCallback((newState) => {
     setGameState(newState);
+    gameStateRef.current = newState;
     broadcastToAll({ type: 'gameState', state: newState });
-  }, []);
+  }, [broadcastToAll]);
 
   // CLIENT: Send vote to host
   const sendVote = useCallback((playerId, choiceIndex) => {
     if (isHost) {
-      // Host votes locally
       setGameState(prev => {
         if (!prev) return prev;
         const newVotes = { ...prev.votes, [playerId]: choiceIndex };
         const updated = { ...prev, votes: newVotes };
+        gameStateRef.current = updated;
         broadcastToAll({ type: 'gameState', state: updated });
         return updated;
       });
     } else if (hostConnRef.current?.open) {
       hostConnRef.current.send({ type: 'vote', playerId, choiceIndex });
     }
-  }, [isHost]);
+  }, [isHost, broadcastToAll]);
 
   const disconnect = useCallback(() => {
     if (peerRef.current) {
@@ -207,12 +228,14 @@ export function useMultiplayer() {
     }
     connectionsRef.current = [];
     hostConnRef.current = null;
+    gameStateRef.current = null;
     setConnected(false);
     setRoomCode('');
     setPlayers([]);
     setGameState(null);
     setIsHost(false);
     setError(null);
+    setPeerId(null);
   }, []);
 
   return {
@@ -223,6 +246,7 @@ export function useMultiplayer() {
     error,
     players,
     gameState,
+    peerId,
     createRoom,
     joinRoom,
     updateGameState,
